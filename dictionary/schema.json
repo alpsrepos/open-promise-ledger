@@ -1,0 +1,486 @@
+{
+  "version": "0.1",
+  "note": "Single source for the data dictionary and the record checks. Field names are snake_case. 'required' fields must be filled on every row; 'codes' lists the only allowed values.",
+  "tables": {
+    "instruments": {
+      "key": "instrument_id",
+      "fields": {
+        "instrument_id": {
+          "required": true,
+          "desc": "Project identifier, I- followed by the main ISIN."
+        },
+        "isins": {
+          "required": true,
+          "desc": "All ISINs of the bond, separated by ';'. Each is checked with the ISIN check digit."
+        },
+        "group_key": {
+          "required": true,
+          "desc": "Issuer group: the GLEIF ultimate parent LEI, or the entity's own LEI where none is reported (frame/frame-groups.csv)."
+        },
+        "issuer_name_terms": {
+          "required": true,
+          "desc": "Issuer name as written in the terms."
+        },
+        "issuer_lei": {
+          "required": true,
+          "desc": "LEI of the legal issuer (20 characters, ISO 17442 check digits)."
+        },
+        "issuer_name_gleif": {
+          "required": true,
+          "desc": "GLEIF legal name on the retrieval date (Method E.10.3)."
+        },
+        "guarantor_lei": {
+          "required": false,
+          "desc": "LEI of any guarantor; empty if none."
+        },
+        "reporting_entity_lei": {
+          "required": true,
+          "desc": "LEI of the entity whose reports the terms name for the targets."
+        },
+        "reporting_entity_country": {
+          "required": true,
+          "desc": "ISO 3166 two-letter country of the reporting entity's legal address (inclusion rule)."
+        },
+        "issuer_label_euronext": {
+          "required": true,
+          "desc": "Instrument label in the registered Euronext file, copied, never reclassified."
+        },
+        "issue_date": {
+          "required": false,
+          "desc": "YYYY-MM-DD. AI-filled, human-checked."
+        },
+        "maturity_date": {
+          "required": false,
+          "desc": "YYYY-MM-DD. AI-filled, human-checked."
+        },
+        "first_call_date": {
+          "required": false,
+          "desc": "YYYY-MM-DD or empty. AI-filled, human-checked."
+        },
+        "amount_million": {
+          "required": false,
+          "desc": "Issued amount in millions. AI-filled, human-checked."
+        },
+        "currency": {
+          "required": false,
+          "desc": "ISO 4217. AI-filled, human-checked."
+        },
+        "state": {
+          "required": true,
+          "codes": [
+            "outstanding",
+            "redeemed early",
+            "matured",
+            "exchanged",
+            "in default"
+          ],
+          "desc": "Only as stated in a public document (Method E.4, E.10.1)."
+        },
+        "state_date": {
+          "required": false,
+          "desc": "YYYY-MM-DD of the state, where not outstanding."
+        },
+        "state_source_ids": {
+          "required": false,
+          "desc": "Source ids for the state, separated by ';' (several may be combined, E.10.1)."
+        },
+        "caps_and_joint_triggers": {
+          "required": false,
+          "desc": "Quote of any cap, 'only once' rule or joint trigger across targets."
+        },
+        "disposition": {
+          "required": true,
+          "codes": [
+            "included",
+            "screened, out of scope",
+            "documents not obtained",
+            "not reached in the order"
+          ],
+          "desc": "Method E.3."
+        },
+        "flags": {
+          "required": false,
+          "codes_multi": [
+            "pilot",
+            "reference case",
+            "stratum",
+            "added from archived list",
+            "preliminary terms",
+            "target not read in terms",
+            "boundary case",
+            "read via machine translation"
+          ],
+          "desc": "Separated by ';'."
+        }
+      }
+    },
+    "promises": {
+      "key": "promise_id",
+      "fields": {
+        "promise_id": {
+          "required": true,
+          "desc": "P- plus group key plus a running number."
+        },
+        "group_key": {
+          "required": true,
+          "desc": "Issuer group."
+        },
+        "quote_original": {
+          "required": true,
+          "desc": "Exact sentence or table row of the terms stating the target."
+        },
+        "quote_language": {
+          "required": true,
+          "desc": "ISO 639-1 code of the quote."
+        },
+        "quote_translation_en": {
+          "required": false,
+          "desc": "Unofficial English translation, required where the language is not 'en'; always marked 'AI translated, the original prevails'."
+        },
+        "quote_source_id": {
+          "required": true,
+          "desc": "Source id."
+        },
+        "quote_page": {
+          "required": true,
+          "desc": "Page number, or the heading for sources without pages."
+        },
+        "framework_quote": {
+          "required": false,
+          "desc": "Where the terms define the target by reference to a framework, the framework sentence (E.10.6)."
+        },
+        "metric": {
+          "required": true,
+          "desc": "Metric as named in the terms."
+        },
+        "unit": {
+          "required": true,
+          "desc": "Unit as in the terms."
+        },
+        "direction": {
+          "required": true,
+          "codes": [
+            "at least",
+            "at most",
+            "equal"
+          ],
+          "desc": "Direction of the target."
+        },
+        "perimeter": {
+          "required": true,
+          "desc": "Scope or perimeter as written (for example 'Scope 1 and 2, group')."
+        },
+        "target_form": {
+          "required": true,
+          "codes": [
+            "absolute",
+            "relative"
+          ],
+          "desc": "Relative targets are recorded as written with the baseline (E.10.7)."
+        },
+        "baseline_value": {
+          "required": false,
+          "desc": "Baseline value, where relative."
+        },
+        "baseline_period": {
+          "required": false,
+          "desc": "Baseline year or period, where relative."
+        },
+        "promised_value": {
+          "required": true,
+          "desc": "Number as written (for a relative target, the percentage change)."
+        },
+        "promised_value_derived_absolute": {
+          "required": false,
+          "desc": "Absolute equivalent, marked derived."
+        },
+        "rounding_rule": {
+          "required": false,
+          "desc": "The terms' own rounding or calculation rule, quoted."
+        },
+        "observation_date": {
+          "required": true,
+          "desc": "YYYY-MM-DD, last day of the measurement period; 31 Dec where only a year is named."
+        },
+        "observation_label_terms": {
+          "required": false,
+          "desc": "The terms' own label, for example 'Reference Year 2025'."
+        },
+        "reporting_deadline": {
+          "required": false,
+          "desc": "YYYY-MM-DD from the terms (any date to publish, deliver or notify the result, E.10.8)."
+        },
+        "reporting_deadline_basis": {
+          "required": true,
+          "codes": [
+            "terms",
+            "fallback 270 days"
+          ],
+          "desc": "Where the deadline comes from."
+        },
+        "change_history": {
+          "required": false,
+          "desc": "Dated old and new values, stated reason, and whether the recalculation clause was cited."
+        },
+        "flags": {
+          "required": false,
+          "codes_multi": [
+            "boundary case",
+            "announced recalculation: no recalculated value found by the editor",
+            "changed outside the terms' clause",
+            "read via machine translation"
+          ],
+          "desc": "Separated by ';'."
+        }
+      }
+    },
+    "links": {
+      "key": "link_id",
+      "fields": {
+        "link_id": {
+          "required": true,
+          "desc": "L- plus instrument id plus promise id."
+        },
+        "instrument_id": {
+          "required": true,
+          "desc": "Instrument."
+        },
+        "promise_id": {
+          "required": true,
+          "desc": "Promise."
+        },
+        "consequence_quote": {
+          "required": true,
+          "desc": "Quote of the payment change in this instrument's terms."
+        },
+        "consequence_summary": {
+          "required": true,
+          "desc": "For example 'coupon +25 bps from the first interest period after 31 Dec 2025'."
+        },
+        "status": {
+          "required": true,
+          "codes": [
+            "Ended before observation date",
+            "Cannot be compared (promise)",
+            "Not yet due",
+            "Stated as reached",
+            "Stated as not reached",
+            "Reported figure reaches the promised value",
+            "Reported figure does not reach the promised value",
+            "Cannot be compared (figure)",
+            "Awaiting report",
+            "No figure recorded yet",
+            "No report found by the editor"
+          ],
+          "desc": "Method section 5 and E.5; tested in order."
+        },
+        "status_basis": {
+          "required": true,
+          "codes": [
+            "issuer statement",
+            "reviewer statement",
+            "comparison of figures by the editor; no issuer statement found",
+            "instrument state",
+            "terms",
+            "dates",
+            "search log"
+          ],
+          "desc": "Never shown without the label."
+        },
+        "status_date": {
+          "required": true,
+          "desc": "YYYY-MM-DD."
+        },
+        "statement_quote": {
+          "required": false,
+          "desc": "Quote of the statement where the basis is a statement."
+        },
+        "statement_source_id": {
+          "required": false,
+          "desc": "Source id of the statement."
+        },
+        "consequence_taking_effect": {
+          "required": true,
+          "codes": [
+            "stated as applied",
+            "announced",
+            "not triggered",
+            "not yet due",
+            "not stated",
+            "not applicable: instrument ended before observation date",
+            "stated as delivered, not seen"
+          ],
+          "desc": "First that applies (Method E.4, E.10.2, E.10.9)."
+        },
+        "consequence_announced_date": {
+          "required": false,
+          "desc": "YYYY-MM-DD where 'announced'."
+        },
+        "flags": {
+          "required": false,
+          "codes_multi": [
+            "statement and figures differ",
+            "status differs on restated figure",
+            "changed after AI comparison",
+            "search incomplete",
+            "report not obtained",
+            "under review",
+            "no reply received",
+            "read via machine translation"
+          ],
+          "desc": "Separated by ';'."
+        }
+      }
+    },
+    "observations": {
+      "key": "observation_id",
+      "fields": {
+        "observation_id": {
+          "required": true,
+          "desc": "O- plus promise id plus period."
+        },
+        "promise_id": {
+          "required": true,
+          "desc": "Promise."
+        },
+        "period_end": {
+          "required": true,
+          "desc": "YYYY-MM-DD end of the reported period."
+        },
+        "reported_value": {
+          "required": false,
+          "desc": "Number as reported."
+        },
+        "reported_unit": {
+          "required": false,
+          "desc": "Unit as reported."
+        },
+        "reported_perimeter": {
+          "required": false,
+          "desc": "Perimeter as reported."
+        },
+        "value_quote": {
+          "required": false,
+          "desc": "Exact quote of the figure."
+        },
+        "source_id": {
+          "required": true,
+          "desc": "Source id."
+        },
+        "page": {
+          "required": true,
+          "desc": "Page or heading."
+        },
+        "statement_text": {
+          "required": false,
+          "desc": "Any statement by the issuer or reviewer on the target, quoted."
+        },
+        "publication_date": {
+          "required": false,
+          "desc": "YYYY-MM-DD. AI-filled, human-checked."
+        },
+        "publication_date_basis": {
+          "required": false,
+          "codes": [
+            "date printed in the document",
+            "regulated-filing timestamp",
+            "earliest web-archive capture"
+          ],
+          "desc": "In this order of preference."
+        },
+        "deadline_relation": {
+          "required": false,
+          "codes": [
+            "dated on or before the deadline",
+            "first dated evidence after the deadline",
+            "cannot be established"
+          ],
+          "desc": "Records dates only; says nothing about whether any duty was met."
+        },
+        "external_review_as_described": {
+          "required": false,
+          "desc": "The reviewer's own words, for example 'limited assurance', quoted."
+        },
+        "external_reviewer": {
+          "required": false,
+          "desc": "Provider name."
+        },
+        "review_standard": {
+          "required": false,
+          "desc": "Standard named, for example ISAE 3000."
+        },
+        "restates_observation_id": {
+          "required": false,
+          "desc": "Earlier observation this one restates."
+        }
+      }
+    },
+    "sources": {
+      "key": "source_id",
+      "fields": {
+        "source_id": {
+          "required": true,
+          "desc": "S- plus a running number."
+        },
+        "title": {
+          "required": true,
+          "desc": "Document title as published."
+        },
+        "publisher_lei": {
+          "required": true,
+          "desc": "Issuer, guarantor, reporting entity or named external reviewer only (E.10.10)."
+        },
+        "doc_type": {
+          "required": true,
+          "codes": [
+            "terms",
+            "final terms",
+            "prospectus",
+            "offering circular",
+            "framework",
+            "annual report",
+            "sustainability report",
+            "SLB progress report",
+            "external review report",
+            "regulated announcement",
+            "investor page"
+          ],
+          "desc": "Type."
+        },
+        "url": {
+          "required": true,
+          "desc": "Where it was retrieved."
+        },
+        "retrieved": {
+          "required": true,
+          "desc": "YYYY-MM-DD."
+        },
+        "sha256": {
+          "required": true,
+          "desc": "Hash of the saved evidence copy."
+        },
+        "archive_url": {
+          "required": false,
+          "desc": "Web-archive link where a capture works."
+        },
+        "third_party_host": {
+          "required": false,
+          "desc": "Where an unaltered copy is hosted by a third party, the issuer's own reference."
+        },
+        "tdm_reservation": {
+          "required": true,
+          "codes": [
+            "none found",
+            "reservation found: not sent to AI",
+            "click-through: not sent to AI"
+          ],
+          "desc": "Copyright check before any file is sent to the AI (L8)."
+        },
+        "language": {
+          "required": true,
+          "desc": "ISO 639-1."
+        }
+      }
+    }
+  }
+}
