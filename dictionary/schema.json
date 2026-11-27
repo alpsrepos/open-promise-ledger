@@ -55,7 +55,7 @@
         },
         "first_call_date": {
           "required": false,
-          "desc": "YYYY-MM-DD or empty. AI-filled, human-checked."
+          "desc": "YYYY-MM-DD of the first issuer call at par (a make-whole call is not counted), or empty. AI-filled, human-checked."
         },
         "amount_million": {
           "required": false,
@@ -110,7 +110,9 @@
             "target not read in terms",
             "boundary case",
             "read via machine translation",
-            "no AI reading"
+            "no AI reading",
+            "changed by the editor",
+            "checked by the editor only"
           ],
           "desc": "Separated by ';'."
         }
@@ -190,7 +192,7 @@
         },
         "promised_value": {
           "required": true,
-          "desc": "Number as written (for a relative target, the percentage change)."
+          "desc": "Number as written. For a relative target, the signed percentage change against the baseline (a 20 per cent reduction is -20, with direction \"at most\")."
         },
         "promised_value_derived_absolute": {
           "required": false,
@@ -231,7 +233,9 @@
             "announced recalculation: no recalculated value found by the editor",
             "changed outside the terms' clause",
             "read via machine translation",
-            "added by the editor"
+            "added by the editor",
+            "changed by the editor",
+            "deadline relative in terms"
           ],
           "desc": "Separated by ';'."
         }
@@ -332,7 +336,10 @@
             "read via machine translation",
             "changed by the editor",
             "no AI reading",
-            "added by the editor"
+            "added by the editor",
+            "changed outside the terms' clause",
+            "target not read in terms",
+            "checked by the editor only"
           ],
           "desc": "Separated by ';'."
         }
@@ -392,7 +399,7 @@
             "regulated-filing timestamp",
             "earliest web-archive capture"
           ],
-          "desc": "In this order of preference."
+          "desc": "In this order of preference. \"Date printed in the document\" is a date the document gives for itself (report date, approval or signature date); the latest such date is used."
         },
         "deadline_relation": {
           "required": false,
@@ -478,7 +485,9 @@
           "codes": [
             "none found",
             "reservation found: not sent to AI",
-            "click-through: not sent to AI"
+            "click-through: not sent to AI",
+            "third-party copy restricted: not used",
+            "notice recorded, not a reservation"
           ],
           "desc": "Copyright check before any file is sent to the AI (L8)."
         },

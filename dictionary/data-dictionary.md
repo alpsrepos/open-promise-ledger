@@ -22,7 +22,7 @@ Key: `instrument_id`
 | `issuer_label_euronext` | yes |  | Instrument label in the registered Euronext file, copied, never reclassified. |
 | `issue_date` | no |  | YYYY-MM-DD. AI-filled, human-checked. |
 | `maturity_date` | no |  | YYYY-MM-DD. AI-filled, human-checked. |
-| `first_call_date` | no |  | YYYY-MM-DD or empty. AI-filled, human-checked. |
+| `first_call_date` | no |  | YYYY-MM-DD of the first issuer call at par (a make-whole call is not counted), or empty. AI-filled, human-checked. |
 | `amount_million` | no |  | Issued amount in millions. AI-filled, human-checked. |
 | `currency` | no |  | ISO 4217. AI-filled, human-checked. |
 | `state` | yes | outstanding; redeemed early; matured; exchanged; in default | Only as stated in a public document (Method E.4, E.10.1). |
@@ -30,7 +30,7 @@ Key: `instrument_id`
 | `state_source_ids` | no |  | Source ids for the state, separated by ';' (several may be combined, E.10.1). |
 | `caps_and_joint_triggers` | no |  | Quote of any cap, 'only once' rule or joint trigger across targets. |
 | `disposition` | yes | included; screened, out of scope; documents not obtained; documents in a language the editor does not read; not reached in the order | Method E.3. |
-| `flags` | no | any of: pilot; reference case; stratum; added from archived list; preliminary terms; target not read in terms; boundary case; read via machine translation; no AI reading | Separated by ';'. |
+| `flags` | no | any of: pilot; reference case; stratum; added from archived list; preliminary terms; target not read in terms; boundary case; read via machine translation; no AI reading; changed by the editor; checked by the editor only | Separated by ';'. |
 
 ## promises
 
@@ -53,7 +53,7 @@ Key: `promise_id`
 | `target_form` | yes | absolute; relative | Relative targets are recorded as written with the baseline (E.10.7). |
 | `baseline_value` | no |  | Baseline value, where relative. |
 | `baseline_period` | no |  | Baseline year or period, where relative. |
-| `promised_value` | yes |  | Number as written (for a relative target, the percentage change). |
+| `promised_value` | yes |  | Number as written. For a relative target, the signed percentage change against the baseline (a 20 per cent reduction is -20, with direction "at most"). |
 | `promised_value_derived_absolute` | no |  | Absolute equivalent, marked derived. |
 | `rounding_rule` | no |  | The terms' own rounding or calculation rule, quoted. |
 | `observation_date` | yes |  | YYYY-MM-DD, last day of the measurement period; 31 Dec where only a year is named. |
@@ -61,7 +61,7 @@ Key: `promise_id`
 | `reporting_deadline` | no |  | YYYY-MM-DD from the terms (any date to publish, deliver or notify the result, E.10.8). |
 | `reporting_deadline_basis` | yes | terms; fallback 270 days | Where the deadline comes from. |
 | `change_history` | no |  | Dated old and new values, stated reason, and whether the recalculation clause was cited. |
-| `flags` | no | any of: boundary case; announced recalculation: no recalculated value found by the editor; changed outside the terms' clause; read via machine translation; added by the editor | Separated by ';'. |
+| `flags` | no | any of: boundary case; announced recalculation: no recalculated value found by the editor; changed outside the terms' clause; read via machine translation; added by the editor; changed by the editor; deadline relative in terms | Separated by ';'. |
 
 ## links
 
@@ -81,7 +81,7 @@ Key: `link_id`
 | `statement_source_id` | no |  | Source id of the statement. |
 | `consequence_taking_effect` | yes | stated as applied; announced; not triggered; not yet due; not stated; not applicable: instrument ended before observation date; stated as delivered, not seen | First that applies (Method E.4, E.10.2, E.10.9). |
 | `consequence_announced_date` | no |  | YYYY-MM-DD where 'announced'. |
-| `flags` | no | any of: statement and figures differ; status differs on restated figure; changed after AI comparison; search incomplete; report not obtained; under review; no reply received; read via machine translation; changed by the editor; no AI reading; added by the editor | Separated by ';'. |
+| `flags` | no | any of: statement and figures differ; status differs on restated figure; changed after AI comparison; search incomplete; report not obtained; under review; no reply received; read via machine translation; changed by the editor; no AI reading; added by the editor; changed outside the terms' clause; target not read in terms; checked by the editor only | Separated by ';'. |
 
 ## observations
 
@@ -100,7 +100,7 @@ Key: `observation_id`
 | `page` | yes |  | Page or heading. |
 | `statement_text` | no |  | Any statement by the issuer or reviewer on the target, quoted. |
 | `publication_date` | no |  | YYYY-MM-DD. AI-filled, human-checked. |
-| `publication_date_basis` | no | date printed in the document; regulated-filing timestamp; earliest web-archive capture | In this order of preference. |
+| `publication_date_basis` | no | date printed in the document; regulated-filing timestamp; earliest web-archive capture | In this order of preference. "Date printed in the document" is a date the document gives for itself (report date, approval or signature date); the latest such date is used. |
 | `deadline_relation` | no | dated on or before the deadline; first dated evidence after the deadline; cannot be established | Records dates only; says nothing about whether any duty was met. |
 | `external_review_as_described` | no |  | The reviewer's own words, for example 'limited assurance', quoted. |
 | `external_reviewer` | no |  | Provider name. |
@@ -122,5 +122,5 @@ Key: `source_id`
 | `sha256` | yes |  | Hash of the saved evidence copy. |
 | `archive_url` | no |  | Web-archive link where a capture works. |
 | `third_party_host` | no |  | Where an unaltered copy is hosted by a third party, the issuer's own reference. |
-| `tdm_reservation` | yes | none found; reservation found: not sent to AI; click-through: not sent to AI | Copyright check before any file is sent to the AI (L8). |
+| `tdm_reservation` | yes | none found; reservation found: not sent to AI; click-through: not sent to AI; third-party copy restricted: not used; notice recorded, not a reservation | Copyright check before any file is sent to the AI (L8). |
 | `language` | yes |  | ISO 639-1. |

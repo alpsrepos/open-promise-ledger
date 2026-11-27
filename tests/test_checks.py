@@ -73,3 +73,34 @@ def test_order_is_reproducible():
     a = [g["group_key"] for g in order.make_order(42)]
     b = [g["group_key"] for g in order.make_order(42)]
     assert a == b and len(a) == len(set(a))
+
+
+def _rules(**tables):
+    from checks import check_rules
+    return check_rules(tables)
+
+
+def test_relative_cut_needs_at_most():
+    p = {"promise_id": "P-1", "target_form": "relative", "baseline_period": "2017", "promised_value": "-20",
+         "direction": "at least", "observation_date": "2025-12-31", "reporting_deadline": "2026-04-30",
+         "reporting_deadline_basis": "terms", "flags": ""}
+    assert any("at most" in e for e in _rules(promises=[p]))
+    p["direction"] = "at most"
+    assert not _rules(promises=[p])
+
+
+def test_state_date_only_when_ended():
+    i = {"instrument_id": "I-1", "state": "outstanding", "state_date": "2025-12-31",
+         "issue_date": "2021-01-01", "maturity_date": "2029-01-01", "first_call_date": ""}
+    assert any("not outstanding" in e for e in _rules(instruments=[i]))
+    i.update(state="matured", state_date="")
+    assert any("needs its state_date" in e for e in _rules(instruments=[i]))
+
+
+def test_capture_cannot_give_after_deadline():
+    p = {"promise_id": "P-1", "observation_date": "2025-12-31", "reporting_deadline": "2026-04-30",
+         "reporting_deadline_basis": "terms", "flags": ""}
+    o = {"observation_id": "O-1", "promise_id": "P-1", "period_end": "2025-12-31",
+         "publication_date": "2026-05-10", "publication_date_basis": "earliest web-archive capture",
+         "deadline_relation": "first dated evidence after the deadline"}
+    assert any("cannot be established" in e for e in _rules(promises=[p], observations=[o]))

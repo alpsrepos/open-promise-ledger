@@ -132,7 +132,69 @@ def check_rules(tables: dict) -> list:
             errors.append(f"promises line {n}: non-English quote needs the English translation")
         if p.get("target_form") == "relative" and not p.get("baseline_period"):
             errors.append(f"promises line {n}: a relative target needs its baseline period")
+        # Relative targets: the promised value is the signed change; a cut is negative with "at most".
+        if p.get("target_form") == "relative" and _num(p.get("promised_value")) is not None:
+            v = _num(p["promised_value"])
+            if v < 0 and p.get("direction") != "at most":
+                errors.append(f"promises line {n}: a negative relative target (a cut) needs direction 'at most'")
+            if v > 0 and p.get("direction") == "at most":
+                errors.append(f"promises line {n}: a positive relative target with 'at most' looks reversed; check the sign")
+        if p.get("observation_date") and p.get("reporting_deadline") and p["reporting_deadline"] < p["observation_date"]:
+            errors.append(f"promises line {n}: reporting deadline before the observation date")
+        if p.get("reporting_deadline_basis") == "terms" and not p.get("reporting_deadline") and "deadline" not in p.get("flags", ""):
+            errors.append(f"promises line {n}: basis 'terms' but no deadline date; give the date or flag why")
+    for n, i in enumerate(tables.get("instruments", []), start=2):
+        st, sd = i.get("state", ""), i.get("state_date", "")
+        if st == "outstanding" and sd:
+            errors.append(f"instruments line {n}: state_date is filled only where the instrument is not outstanding")
+        if st and st != "outstanding" and not sd:
+            errors.append(f"instruments line {n}: an ended instrument needs its state_date")
+        iss, mat, call = i.get("issue_date", ""), i.get("maturity_date", ""), i.get("first_call_date", "")
+        if iss and mat and mat <= iss:
+            errors.append(f"instruments line {n}: maturity not after issue")
+        if call and ((iss and call < iss) or (mat and call > mat)):
+            errors.append(f"instruments line {n}: first call date outside issue to maturity")
+        if st == "matured" and mat and sd and sd != mat:
+            errors.append(f"instruments line {n}: matured on a date other than the maturity date; use 'redeemed early' or check")
+    for n, o in enumerate(tables.get("observations", []), start=2):
+        p = promises.get(o.get("promise_id"))
+        if p is None:
+            errors.append(f"observations line {n}: promise_id not in promises")
+            continue
+        basis, rel = o.get("publication_date_basis", ""), o.get("deadline_relation", "")
+        pub, dl = o.get("publication_date", ""), p.get("reporting_deadline", "")
+        if rel == "first dated evidence after the deadline" and basis == "earliest web-archive capture":
+            errors.append(f"observations line {n}: a web capture alone gives 'cannot be established' (E.4)")
+        if pub and dl and basis in {"date printed in the document", "regulated-filing timestamp"}:
+            want = "dated on or before the deadline" if pub <= dl else "first dated evidence after the deadline"
+            if rel != want:
+                errors.append(f"observations line {n}: deadline_relation should be '{want}' ({pub} against {dl})")
+        if pub and dl and basis == "earliest web-archive capture" and pub <= dl and rel != "dated on or before the deadline":
+            errors.append(f"observations line {n}: a capture on or before the deadline gives 'dated on or before the deadline'")
+        if o.get("period_end") and p.get("observation_date") and o["period_end"] != p["observation_date"] and not o.get("restates_observation_id"):
+            errors.append(f"observations line {n}: period_end differs from the promise's observation date")
+    # Comparison labels are recomputed from the figures.
+    for n, link in enumerate(tables.get("links", []), start=2):
+        status = link.get("status", "")
+        if not status.startswith("Reported figure"):
+            continue
+        p = promises.get(link.get("promise_id"))
+        obs = [o for o in tables.get("observations", []) if o.get("promise_id") == link.get("promise_id") and _num(o.get("reported_value")) is not None]
+        if p is None or not obs or _num(p.get("promised_value")) is None:
+            continue
+        v, target = _num(obs[-1]["reported_value"]), _num(p["promised_value"])
+        ok = {"at least": v >= target, "at most": v <= target, "equal": v == target}.get(p.get("direction"))
+        want = "Reported figure reaches the promised value" if ok else "Reported figure does not reach the promised value"
+        if ok is not None and status != want:
+            errors.append(f"links line {n}: figures give '{want}'")
     return errors
+
+
+def _num(x):
+    try:
+        return float(str(x).replace(",", ""))
+    except (TypeError, ValueError):
+        return None
 
 
 def scan_words() -> list:
