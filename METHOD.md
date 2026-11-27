@@ -99,12 +99,12 @@ How this text was made: [to be written after the editor rewrites every rule by h
 
 ## Appendix A. Reference cases (worked examples)
 
-Values marked * are from secondary sources and are confirmed from the bond documents in the pilot (pathway step 1.5). Once confirmed, these cases are the training material for the blind coder and the test lines for contributors.
+Values marked * are from secondary sources and are confirmed from the bond documents before the pilot. H&M replaced Eni on 27 November 2026, before the seed was known, because Eni's website terms do not allow its materials to be used in AI systems. Once confirmed, these cases are the training material for the blind coder and the test lines for contributors.
 
 | Case | Instruments | Promises | Links | Observation and label |
 |---|---|---|---|---|
 | Enel | 10 bonds in the frame, each with its ISIN list* | 1: Scope 1 intensity, at most, 148 gCO2eq/kWh*, observation date 31 Dec 2023* | 10, each with consequence "step-up 25 bps"* | Reported 160*; issuer statement that the target was not met: "Stated as not reached", basis "issuer statement"; consequence: stated as applied*. One promise on ten links |
-| Eni retail SLB 2023 | 1 (EUR 2bn, due 10 Feb 2028) | 2, one per target, each with its own observation date | 2, each "see joint consequence"; instrument: +0.50% on the final coupon, any target | Each promise has its own observation and label; the consequence is counted once |
+| H&M | 1 (H&M Finance B.V., EUR 500m, XS2303070911; parent H & M Hennes & Mauritz AB) | 3, one per target, each with its own observation date* | 3, each "see joint consequence"; instrument: one step-up if any target is not reached* | Each promise has its own observation and label; issuer statements that the targets were reached*; baselines restated without citing the recalculation clause, so the links are flagged; the consequence is counted once |
 | PPC | 1 (notes due 2026) | 1: Scope 1 emissions, at most, minus 40% against 2019, observation date 31 Dec 2022 | 1: step-up 50 bps | Reported minus 36%; issuer statement of the result: "Stated as not reached", basis "issuer statement". Not "Cannot be compared", because the issuer reports the percentage change |
 
 ## Appendix B. Promise definitions for later phases

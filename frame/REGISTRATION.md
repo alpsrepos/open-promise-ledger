@@ -42,3 +42,5 @@ Countries (legal address of the reporting entity): Bulgaria, Croatia, Czechia, E
 ## 6. Reference cases known before registration
 
 Enel, Eni and PPC (Method Appendix A). If drawn, they are coded, flagged "reference case" and kept out of the blind coding and the held-out set.
+
+Change on 27 November 2026, before the seed is known: Eni is replaced by H&M (H & M Hennes & Mauritz AB group), because Eni's website terms prohibit use of its materials in AI systems. H&M was also coded by a blind test coder during the Method review. Both Eni and H&M are treated as known before registration: if drawn, each is flagged "reference case" and kept out of the blind coding and the held-out set. See protocol/deviations.md.
