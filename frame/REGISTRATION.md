@@ -1,5 +1,7 @@
 # Frame registration: Open Promise Ledger, phase 1
 
+Zenodo DOI: [10.5281/zenodo.24572399](https://doi.org/10.5281/zenodo.24572399) (public record, restricted files), published 26 November 2026.
+
 Registered by Ismet Alp Ceylan (ORCID 0000-0001-7478-6227) on 26 November 2026, before the seed is known and before any group is screened. Method version 0.1 (METHOD.md in this repository at the tagged commit `frame-v1`).
 
 ## 1. Inputs

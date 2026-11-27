@@ -3,7 +3,8 @@
 Inputs (registered with the frame; the Euronext file itself is kept private until its reuse terms are recorded):
   1. the Euronext ESG bonds list as downloaded (CSV), path given as argument 1
   2. the GLEIF ISIN-LEI mapping file of the same day (CSV), path given as argument 2
-  3. frame/name-match-picks.json: LEIs chosen by name match for issuers the mapping file does not cover
+  3. frame/isin-overrides.json: LEIs set for single ISINs after the check
+  4. frame/name-match-picks.json: LEIs chosen by name match for issuers the mapping file does not cover
      (each to be checked by the editor; see frame/lei-name-matches-to-check.csv)
 
 Steps:
@@ -65,6 +66,7 @@ def main():
     for isin, lei in isin_lei.items():
         by_label[bonds[isin]["issuer_label"]].add(lei)
     picks = json.loads((ROOT / "frame" / "name-match-picks.json").read_text(encoding="utf-8"))
+    overrides = json.loads((ROOT / "frame" / "isin-overrides.json").read_text(encoding="utf-8"))
     cache = {}
 
     def entity(lei):
@@ -81,7 +83,9 @@ def main():
 
     out = []
     for isin, b in sorted(bonds.items()):
-        if isin in isin_lei:
+        if isin in overrides:
+            lei, src = overrides[isin], "editor check: ISIN-level correction"
+        elif isin in isin_lei:
             lei, src = isin_lei[isin], "GLEIF ISIN-LEI map"
         elif by_label.get(b["issuer_label"]):
             lei, src = sorted(by_label[b["issuer_label"]])[0], "same issuer label as a mapped ISIN"
@@ -108,7 +112,34 @@ def main():
         w.writeheader()
         w.writerows(out)
     print(len(out), "bonds,", len({o["group_key"] for o in out}), "groups")
+    write_groups()
 
 
 if __name__ == "__main__":
     main()
+
+
+def write_groups():
+    """Write frame/frame-groups.csv from frame/frame-bonds.csv."""
+    rows = list(csv.DictReader(open(ROOT / "frame" / "frame-bonds.csv", encoding="utf-8")))
+    groups = {}
+    for r in rows:
+        g = groups.setdefault(r["group_key"], {"group_key": r["group_key"], "group_name": r["group_name"],
+                                               "group_country": r["group_country"], "group_source": r["group_source"],
+                                               "bonds": 0, "bonds_listed_by_2023": 0, "issuer_labels": set()})
+        g["bonds"] += 1
+        g["bonds_listed_by_2023"] += r["listed_by_2023"] == "True"
+        g["issuer_labels"].add(r["issuer_label"])
+    with open(ROOT / "frame" / "frame-groups.csv", "w", newline="", encoding="utf-8") as fh:
+        w = csv.DictWriter(fh, fieldnames=["group_key", "group_name", "group_country", "group_source", "bonds",
+                                           "bonds_listed_by_2023", "issuer_labels"])
+        w.writeheader()
+        for k in sorted(groups):
+            g = groups[k]
+            g["issuer_labels"] = ";".join(sorted(g["issuer_labels"]))
+            w.writerow(g)
+    print(len(groups), "groups written")
+
+
+if __name__ == "__main__" and len(sys.argv) == 1:
+    write_groups()

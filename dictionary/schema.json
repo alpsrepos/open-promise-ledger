@@ -94,6 +94,7 @@
             "included",
             "screened, out of scope",
             "documents not obtained",
+            "documents in a language the editor does not read",
             "not reached in the order"
           ],
           "desc": "Method E.3."
@@ -108,7 +109,8 @@
             "preliminary terms",
             "target not read in terms",
             "boundary case",
-            "read via machine translation"
+            "read via machine translation",
+            "no AI reading"
           ],
           "desc": "Separated by ';'."
         }
@@ -228,7 +230,8 @@
             "boundary case",
             "announced recalculation: no recalculated value found by the editor",
             "changed outside the terms' clause",
-            "read via machine translation"
+            "read via machine translation",
+            "added by the editor"
           ],
           "desc": "Separated by ';'."
         }
@@ -326,7 +329,10 @@
             "report not obtained",
             "under review",
             "no reply received",
-            "read via machine translation"
+            "read via machine translation",
+            "changed by the editor",
+            "no AI reading",
+            "added by the editor"
           ],
           "desc": "Separated by ';'."
         }

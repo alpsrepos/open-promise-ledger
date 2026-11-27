@@ -29,8 +29,8 @@ Key: `instrument_id`
 | `state_date` | no |  | YYYY-MM-DD of the state, where not outstanding. |
 | `state_source_ids` | no |  | Source ids for the state, separated by ';' (several may be combined, E.10.1). |
 | `caps_and_joint_triggers` | no |  | Quote of any cap, 'only once' rule or joint trigger across targets. |
-| `disposition` | yes | included; screened, out of scope; documents not obtained; not reached in the order | Method E.3. |
-| `flags` | no | any of: pilot; reference case; stratum; added from archived list; preliminary terms; target not read in terms; boundary case; read via machine translation | Separated by ';'. |
+| `disposition` | yes | included; screened, out of scope; documents not obtained; documents in a language the editor does not read; not reached in the order | Method E.3. |
+| `flags` | no | any of: pilot; reference case; stratum; added from archived list; preliminary terms; target not read in terms; boundary case; read via machine translation; no AI reading | Separated by ';'. |
 
 ## promises
 
@@ -61,7 +61,7 @@ Key: `promise_id`
 | `reporting_deadline` | no |  | YYYY-MM-DD from the terms (any date to publish, deliver or notify the result, E.10.8). |
 | `reporting_deadline_basis` | yes | terms; fallback 270 days | Where the deadline comes from. |
 | `change_history` | no |  | Dated old and new values, stated reason, and whether the recalculation clause was cited. |
-| `flags` | no | any of: boundary case; announced recalculation: no recalculated value found by the editor; changed outside the terms' clause; read via machine translation | Separated by ';'. |
+| `flags` | no | any of: boundary case; announced recalculation: no recalculated value found by the editor; changed outside the terms' clause; read via machine translation; added by the editor | Separated by ';'. |
 
 ## links
 
@@ -81,7 +81,7 @@ Key: `link_id`
 | `statement_source_id` | no |  | Source id of the statement. |
 | `consequence_taking_effect` | yes | stated as applied; announced; not triggered; not yet due; not stated; not applicable: instrument ended before observation date; stated as delivered, not seen | First that applies (Method E.4, E.10.2, E.10.9). |
 | `consequence_announced_date` | no |  | YYYY-MM-DD where 'announced'. |
-| `flags` | no | any of: statement and figures differ; status differs on restated figure; changed after AI comparison; search incomplete; report not obtained; under review; no reply received; read via machine translation | Separated by ';'. |
+| `flags` | no | any of: statement and figures differ; status differs on restated figure; changed after AI comparison; search incomplete; report not obtained; under review; no reply received; read via machine translation; changed by the editor; no AI reading; added by the editor | Separated by ';'. |
 
 ## observations
 
