@@ -42,3 +42,16 @@ Countries (legal address of the reporting entity): Bulgaria, Croatia, Czechia, E
 ## 6. Reference cases known before registration
 
 Enel, Eni and PPC (Method Appendix A). If drawn, they are coded, flagged "reference case" and kept out of the blind coding and the held-out set.
+
+Change on 27 November 2026, before the seed is known: Eni is replaced by H&M (H & M Hennes & Mauritz AB group), because Eni's website terms prohibit use of its materials in AI systems. H&M was also coded by a blind test coder during the Method review. Both Eni and H&M are treated as known before registration: if drawn, each is flagged "reference case" and kept out of the blind coding and the held-out set. See protocol/deviations.md.
+
+## 7. Seed and order (added 27 November 2026, after the draw)
+
+Nothing above this section was changed.
+
+- Draw: EuroMillions draw 2,002, Friday 27 November 2026, 21:00 CET. The first draw after the frame deposit.
+- Drawn order: main numbers 34, 26, 12, 17, 38; Lucky Stars 9, 5.
+- Seed: 34261217380905.
+- Sources for the drawn order: lottery.co.uk results page for 27 November 2026 with "drawn order" shown (screenshot kept by the editor, SHA-256 e9a5ab8dec23a188527e5311bf23ad3d5059deb7424291898877143c4a936b3c). A second source for the drawn order is to be added before the order is published. The numbers themselves (12, 17, 26, 34, 38; stars 5, 9) were confirmed by four independent results pages.
+- Run: `python scripts/order.py 34261217380905`, Python 3.13.18, `random.Random.shuffle`. Run twice with the same result.
+- order.csv SHA-256: eedf099b0211b2c1b336ceb2a8a6dd486fc8fbf9eedb477236294a16da1e512c. 106 groups.

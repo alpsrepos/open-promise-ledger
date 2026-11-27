@@ -1,0 +1,4 @@
+date,case,check,result,time_received,time_answered,note
+2026-11-27,Enel (reference case),editor check of AI draft,"checked, no changes",10:43,10:44,editor confirmed at 10:46 that he checked; check pack sent 10:43 Berlin time
+2026-11-27,H&M (reference case),editor check of AI draft,"checked, no changes",10:43,10:44,editor confirmed at 10:46 that he checked; check pack sent 10:43 Berlin time
+2026-11-27,Enel (reference case),editor reading without AI of the base prospectus conditions (bp_26jan2021 p.92 to 96; bp_7jan2022 p.109 to 113),"read, record confirmed (""looks good"")",11:58,12:09,item added to the to-do list at about 11:58; answer at 12:09; no AI check of these pages because of the reservation

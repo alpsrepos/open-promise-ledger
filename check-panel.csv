@@ -1,0 +1,12 @@
+date,case,check,model,findings_status,findings_value,findings_wording,status_disagreements,result_file
+2026-11-27,H&M,value check,claude-sonnet,0,0,4 (+8 omissions),0,worked/hm/CHECK-model2.md
+2026-11-27,Enel,value check,claude-sonnet,0,0,8,0,worked/enel/CHECK-model2.md
+2026-11-27,H&M,blind re-reading,claude-fable,0,0,2,0,check/blind-hm.md
+2026-11-27,Enel,blind re-reading,claude-fable,0,0,2,0,check/blind-enel.md
+2026-11-27,H&M and Enel,blind status check,claude-haiku,0,0,13 (1 date proposal rejected at the page),0,check/blind-status/compare.md
+2026-11-27,H&M and Enel,adversarial check,claude-sonnet,0,4 (Enel 45-day rule; H&M direction; Enel state_date; H&M first call date),5,0,check/adversarial.md
+2026-11-27,H&M,planted-error test (6 planted: number, date, page, direction, status, ISIN digit),scripts + claude-sonnet value check,scripts 2 of 6; with value check 6 of 6; 0 false findings,,,,check/planted/hm-findings.csv
+2026-11-27,Enel,planted-error test (6 planted: number, date, page, direction, status, ISIN digit),scripts + claude-sonnet value check,scripts 1 of 6; with value check 6 of 6; 1 real error found in the record (page citation),,,,check/planted/enel-findings.csv
+2026-11-27,Enel,prospectus pages check (S-6, S-7) after the editor read them,claude-sonnet,0,2 (deadline wording; recalculation condition),7 (pages, omissions),0,worked/enel/CHECK-prospectus-sonnet.md
+2026-11-27,H&M,AI auditor development run with 6 planted errors,claude-sonnet,"5 of 6 planted caught (missed: a planted wrong page, because the sheet had no page line)",,1 real minor error (Deloitte page),0,runs/audit-hm/findings.csv
+2026-11-27,Enel,AI auditor development run with 6 planted errors,claude-sonnet,"5 of 6 caught as scored; the sixth (wrong page) was found but logged under quote_original, so 6 of 6 in substance",,0,0,runs/audit-enel/findings.csv
