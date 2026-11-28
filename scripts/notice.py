@@ -46,7 +46,9 @@ def main(record, pub, reply_by=""):
                 f"- Target as written in the terms: \"{p['quote_original']}\" ({p['quote_source_id']}, page {p['quote_page']})",
                 f"- Observation date: {p['observation_date']}; reporting deadline: {p['reporting_deadline'] or 'none in the terms'}"]
         for o in [o for o in obs if o["promise_id"] == p["promise_id"]]:
-            out.append(f"- Reported: {o['reported_value']} {o['reported_unit']} ({o['source_id']}, page {o['page']})")
+            unit = o["reported_unit"]
+            unit = "" if (not unit or unit.startswith("not found")) else " " + unit
+            out.append(f"- Reported: {o['reported_value']}{unit} ({o['source_id']}, page {o['page']})")
         out.append(f"- Status in the record: {l['status']} (basis: {l['status_basis']})")
         if l.get("statement_quote"):
             out.append(f"- Statement relied on: \"{l['statement_quote']}\" ({l['statement_source_id']})")
